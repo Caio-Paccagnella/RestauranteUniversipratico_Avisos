@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: universipratico-postgres
+    environment:
+      POSTGRES_DB: universipratico
+      POSTGRES_USER: universipratico
+      POSTGRES_PASSWORD: universipratico
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U universipratico -d universipratico"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./Restaurante_UniversiPratico_Gerenciamento_Avisos_BackEnd
+    container_name: universipratico-backend
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/universipratico
+      SPRING_DATASOURCE_USERNAME: universipratico
+      SPRING_DATASOURCE_PASSWORD: universipratico
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./Restarante_UniversiPratico_Avisos_FrontEnd
+    container_name: universipratico-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
