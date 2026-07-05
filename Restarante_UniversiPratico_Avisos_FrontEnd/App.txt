@@ -1,0 +1,34 @@
+
+import { View, Text } from 'react-native';
+import './global.css';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Header from './components/Header'
+import TelaAvisos from './app/TelaAvisos';
+import TelaNovoAviso from 'app/TelaCriarAviso';
+
+import { 
+  useFonts, 
+  KumbhSans_400Regular, 
+  KumbhSans_700Bold 
+} from '@expo-google-fonts/kumbh-sans';
+
+
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    KumbhSans_400Regular,
+    KumbhSans_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Font não carregou</Text>
+      </View>
+    );
+  }
+  return (
+    <SafeAreaProvider>
+      <TelaNovoAviso/>
+    </SafeAreaProvider>
+  );
+}
