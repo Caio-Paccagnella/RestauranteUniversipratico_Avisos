@@ -16,6 +16,7 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Avisos', headerShown: false }}  />
       <Stack.Screen name="TelaCriarAviso" options={{ title: 'CriarAviso', headerShown: false }}  />
+      <Stack.Screen name="TelaEditarAviso" options={{ title: 'EditarAviso', headerShown: false }}  />
     </Stack>
   );
 }

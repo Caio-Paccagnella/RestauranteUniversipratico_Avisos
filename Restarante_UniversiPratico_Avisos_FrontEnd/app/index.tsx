@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Text, TouchableOpacity, View, ScrollView }  from 'react-native'
 import axios from 'axios'
 import '../global.css'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 import Header from '../components/Header'
 import TabBar from '../components/TabBar'
@@ -11,7 +12,11 @@ export default function TelaAvisos(){
     
     const [avisos, setAvisos] = useState<any[]>([])
 
-    
+    const deletarAviso = async (idDoAviso: number) => {
+    await axios.delete(`http://localhost:8081/avisos/${idDoAviso}`);
+    setAvisos(avisosAnteriores => avisosAnteriores.filter(aviso => aviso.id !== idDoAviso));
+  };
+
     useEffect(() => {
         axios.get('http://localhost:8081/avisos')
             .then(response => setAvisos(response.data))
@@ -33,9 +38,24 @@ export default function TelaAvisos(){
                         <View 
                             key={aviso.id} 
                             className='p-4 mb-3 bg-white rounded-lg border border-gray-300'
-                        >
-                            <Text className='font-kumbhBold text-lg text-gray-800'>{aviso.titulo}</Text>
-                            <Text className='text-gray-600 mt-1'>{aviso.descricao}</Text>
+                        >   
+                            <View className='self-end absolute flex flex-row gap-4'>
+                                <Link href={{
+                                    pathname: "/TelaEditarAviso", 
+                                    params: { id: aviso.id, titulo: aviso.titulo, descricao: aviso.descricao}
+                                }} 
+                                asChild
+                                >
+                                    <TouchableOpacity>
+                                        <FontAwesome6 name="pencil" size={24} color="black" />
+                                    </TouchableOpacity>
+                                </Link>
+                                <TouchableOpacity onPress={() => deletarAviso(aviso.id)}>
+                                    <FontAwesome6 name="trash" size={24} color="red" />
+                                </TouchableOpacity>
+                            </View>
+                            <Text className='font-kumbhBold text-lg text-gray-800 self-start w-48'>{aviso.titulo}</Text>
+                            <Text className='text-gray-600 mt-1 self-start w-60'>{aviso.descricao}</Text>
                         </View>
                     ))}
                 </ScrollView>

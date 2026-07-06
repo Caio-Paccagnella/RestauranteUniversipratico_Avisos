@@ -29,6 +29,7 @@ public class AvisoMapper {
         String titulo = aviso.getTitulo().toUpperCase();
 
         return new ResponseAvisoDTO(
+            aviso.getId(),
             titulo,
             aviso.getDescricao(),
             assinatura,
