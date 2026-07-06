@@ -1,15 +1,12 @@
-# ==========================================
-# Estágio 1: Instalação e Build (Node.js)
-# ==========================================
+
 FROM node:20-alpine AS builder
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos de dependências primeiro (otimiza o cache do Docker)
+# Copia os arquivos de dependências primeiro 
 COPY package.json package-lock.json* ./
 
-# Instala as dependências do projeto
 RUN npm install
 
 # Copia o restante do código do projeto
@@ -19,9 +16,7 @@ COPY . .
 # O Expo exporta os arquivos finais, por padrão, para a pasta "dist"
 RUN npx expo export
 
-# ==========================================
-# Estágio 2: Servidor Web (Nginx)
-# ==========================================
+
 FROM nginx:1.27-alpine
 
 # Copia o seu arquivo de configuração do Nginx
